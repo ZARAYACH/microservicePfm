@@ -7,17 +7,25 @@
     <parent>
         <groupId>com.microservice</groupId>
         <artifactId>pfm</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
 
 
-    <artifactId>Common</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>common</artifactId>
+    <version>0.0.2-SNAPSHOT</version>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub OWNER Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/ZARAYACH/microservicePfm</url>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
-            <groupId>commons-validator</groupId>
-            <artifactId>commons-validator</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
     </dependencies>
 
