@@ -95,5 +95,5 @@ jobs:
           pr_label: "version update 🚀"
       - name: Clean up Docker images and containers
         run: |
-          docker rmi -f $DOCKER_IMAGE_TAG $DOCKER_IMAGE
+          docker rmi -f $(docker images -aq)
           docker system prune --force
