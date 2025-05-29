@@ -8,9 +8,9 @@
         <version>3.4.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.microservice</groupId>
+    <groupId>com.microservices</groupId>
     <artifactId>pfm</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <name>pfm</name>
     <description>Demo project for Spring Boot</description>
 
