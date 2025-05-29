@@ -30,11 +30,11 @@
     </properties>
 
     <modules>
-        <module>Event</module>
-        <module>Reservation</module>
-        <module>Payment</module>
-        <module>Notification</module>
-        <module>Common</module>
+        <module>event</module>
+        <module>reservation</module>
+        <module>payment</module>
+        <module>notification</module>
+        <module>common</module>
     </modules>
 
     <dependencyManagement>
