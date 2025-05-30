@@ -53,7 +53,7 @@ jobs:
             for module in "${MODULES[@]}"; do
                 IMAGE=ghcr.io/zarayach/microservices-pfm/${module}:${VERSION}
                 echo "Building and pushing $IMAGE"
-                docker build -t $IMAGE ./$module
+                docker build -t $IMAGE ./$module --label built-by=github-actions --label build-version=$VERSION ./$module
                 docker push $IMAGE
             done
       - name: Publishing release and tags in github
@@ -95,5 +95,6 @@ jobs:
           pr_label: "version update 🚀"
       - name: Clean up Docker images and containers
         run: |
-          docker rmi -f $(docker images -aq)
+          echo "Removing images labeled with built-by=github-actions"
+          docker rmi -f $(docker images --filter "label=built-by=github-actions" --quiet) || true
           docker system prune --force
