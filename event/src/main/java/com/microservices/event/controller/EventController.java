@@ -9,6 +9,7 @@ import com.microservices.event.mapper.EventMapper;
 import com.microservices.event.modal.Event;
 import com.microservices.event.service.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class EventController {
     }
 
     @PostMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
     public EventDto updateEvent(@PathVariable Long id, @RequestBody CreateEventDto updateEventDto) throws BadArgumentException, NotFoundException {
         Event event = eventService.findById(id);
         return eventMapper.toEventDto(eventService.update(event, updateEventDto));
