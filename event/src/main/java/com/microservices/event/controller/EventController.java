@@ -33,12 +33,12 @@ public class EventController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public EventDto createEvent(@RequestBody CreateEventDto createEventDto) throws BadArgumentException {
         return eventMapper.toEventDto(eventService.create(createEventDto));
     }
 
-    @PostMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping("/{id}")
     public EventDto updateEvent(@PathVariable Long id, @RequestBody CreateEventDto updateEventDto) throws BadArgumentException, NotFoundException {
         Event event = eventService.findById(id);
         return eventMapper.toEventDto(eventService.update(event, updateEventDto));

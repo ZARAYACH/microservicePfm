@@ -16,3 +16,9 @@ spring.jpa.defer-datasource-initialization=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
 spring.datasource.tomcat.test-on-borrow=true
 spring.datasource.tomcat.validation-query=SELECT 1
+
+springdoc.swagger-ui.with-credentials=true
+springdoc.show-login-endpoint=true
+springdoc.api-docs.path=/api/v1/api-docs
+springdoc.swagger-ui.path=/swagger-ui.html
+springdoc.remove-broken-reference-definitions=false

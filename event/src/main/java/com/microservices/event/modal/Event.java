@@ -1,9 +1,7 @@
 package com.microservices.event.modal;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.microservices.common.converters.LongSetToJson;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -25,21 +24,28 @@ public class Event {
     private Long id;
 
     private String name;
+
+    private String type;
     private Double ticketPrice; // could be a list later
     private String place;
     private LocalDateTime date;
     private Integer availableTickets;
+
+    @Convert(converter = LongSetToJson.class)
+    private Set<Long> organiserIds;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    public Event(String name, Double ticketPrice, String place, LocalDateTime date, Integer availableTickets) {
+    public Event(String name, Double ticketPrice, String place, LocalDateTime date, Integer availableTickets, String type, Set<Long> organiserIds) {
         this.name = name;
+        this.type = type;
         this.ticketPrice = ticketPrice;
         this.place = place;
         this.date = date;
+        this.organiserIds = organiserIds;
         this.availableTickets = availableTickets;
     }
 }

@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,10 +39,12 @@ public class EventServiceTest {
         validEvent = new Event(
                 1L,
                 "Event Name",
+                "concert",
                 25.0,
                 "Test Place",
                 LocalDateTime.now().plusDays(1),
                 100,
+                Collections.singleton(1L),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -56,7 +59,9 @@ public class EventServiceTest {
                 validEvent.getTicketPrice(),
                 validEvent.getAvailableTickets(),
                 validEvent.getPlace(),
-                validEvent.getDate()));
+                validEvent.getDate(),
+                validEvent.getType(),
+                validEvent.getOrganiserIds()));
 
         verify(eventRepository).save(any());
 
@@ -99,7 +104,9 @@ public class EventServiceTest {
                 30.0,
                 80,
                 "Updated Place",
-                LocalDateTime.now().plusDays(5)
+                LocalDateTime.now().plusDays(5),
+                "concert",
+                Collections.singleton(1L)
         );
 
         when(eventRepository.save(any(Event.class))).thenReturn(validEvent);
@@ -119,7 +126,9 @@ public class EventServiceTest {
                 -1.0,
                 0,
                 "",
-                LocalDateTime.now().minusDays(1)
+                LocalDateTime.now().minusDays(1),
+                "",
+                Collections.emptySet()
         );
 
         assertThrows(BadArgumentException.class, () -> eventService.update(validEvent, invalidDto));

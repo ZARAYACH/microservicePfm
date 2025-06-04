@@ -37,10 +37,13 @@ public class EventService {
     private Event validateCreateEventDtoAndCreate(CreateEventDto createEventDto) throws BadArgumentException {
         try {
             Assert.isTrue(StringUtils.isNotBlank(createEventDto.name()), "Event Name can't be null or empty");
+            Assert.isTrue(StringUtils.isNotBlank(createEventDto.type()), "Event type can't be null or empty");
             Assert.isTrue(createEventDto.date() != null && createEventDto.date().isAfter(LocalDateTime.now()), "Event Date can't be null & can't be past today");
             Assert.isTrue(StringUtils.isNotBlank(createEventDto.place()), "Event place can't be null or empty");
             Assert.isTrue(createEventDto.ticketPrice() > 0, "Event tickets price should be bigger than 0");
             Assert.isTrue(createEventDto.availableTickets() > 0, "Event available tickets should be bigger than 0");
+            Assert.isTrue(createEventDto.organiserIds() != null && !createEventDto.organiserIds().isEmpty(), "Organiser list can't be null nor empty");
+            // Assert that organisers exists
         } catch (Exception e) {
             throw new BadArgumentException(e);
         }
@@ -48,7 +51,9 @@ public class EventService {
                 createEventDto.ticketPrice(),
                 createEventDto.place(),
                 createEventDto.date(),
-                createEventDto.availableTickets());
+                createEventDto.availableTickets(),
+                createEventDto.type(),
+                createEventDto.organiserIds());
     }
 
     public Event update(Event event, CreateEventDto updateEventDto) throws BadArgumentException {
