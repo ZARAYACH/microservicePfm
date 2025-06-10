@@ -36,6 +36,7 @@
         <module>payment</module>
         <module>notification</module>
         <module>common</module>
+        <module>authorizationserver</module>
     </modules>
 
     <dependencyManagement>
