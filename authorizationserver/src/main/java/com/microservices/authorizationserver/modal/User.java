@@ -34,9 +34,9 @@ public class User implements UserDetails {
     @JoinTable(name = "user_authority",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id"))
-    private Set<Role> authorities = new HashSet<>();
+    private Set<Authority> authorities = new HashSet<>();
 
-    public User(String emailAddress, String password, String firstName, String lastName, String phoneNumber,Set<Role> authorities) {
+    public User(String emailAddress, String password, String firstName, String lastName, String phoneNumber,Set<Authority> authorities) {
         this.emailAddress = emailAddress;
         this.password = password;
         this.firstName = firstName;

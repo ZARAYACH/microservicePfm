@@ -10,10 +10,10 @@
 <body>
 <div class="container">
     <form class="form-signin w-100 m-auto" method="post" th:action="@{/login}">
-        <div th:if="${param.error}" class="alert alert-danger" role="alert">
+        <div th:if="${param.error}" class="alert alert-danger" authority="alert">
             Invalid username or password.
         </div>
-        <div th:if="${param.logout}" class="alert alert-success" role="alert">
+        <div th:if="${param.logout}" class="alert alert-success" authority="alert">
             You have been logged out.
         </div>
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
@@ -27,11 +27,11 @@
         </div>
         <div>
             <button class="w-100 btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-            <a class="w-100 btn btn-light btn-block bg-white" href="/oauth2/authorization/google-idp" role="link" style="margin-top: 10px">
+            <a class="w-100 btn btn-light btn-block bg-white" href="/oauth2/authorization/google-idp" authority="link" style="margin-top: 10px">
                 <img src="/assets/img/google.png" th:src="@{/assets/img/google.png}" width="20" style="margin-right: 5px;" alt="Sign in with Google">
                 Sign in with Google
             </a>
-            <a class="w-100 btn btn-light btn-block bg-white" href="/oauth2/authorization/github-idp" role="link" style="margin-top: 10px">
+            <a class="w-100 btn btn-light btn-block bg-white" href="/oauth2/authorization/github-idp" authority="link" style="margin-top: 10px">
                 <img src="/assets/img/github.png" th:src="@{/assets/img/github.png}" width="24" style="margin-right: 5px;" alt="Sign in with Github">
                 Sign in with Github
             </a>

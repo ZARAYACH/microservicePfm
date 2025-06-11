@@ -5,13 +5,13 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.microservices.authorizationserver.modal.Privilege;
-import com.microservices.authorizationserver.modal.Role;
+import com.microservices.authorizationserver.modal.Authority;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class RoleDeserializer extends StdDeserializer<Role> {
+public class RoleDeserializer extends StdDeserializer<Authority> {
 
     public RoleDeserializer() {
         this(null);
@@ -22,7 +22,7 @@ public class RoleDeserializer extends StdDeserializer<Role> {
     }
 
     @Override
-    public Role deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException  {
+    public Authority deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException  {
         JsonNode node = jp.getCodec().readTree(jp);
 
         String id = node.get("id").asText();
@@ -42,11 +42,11 @@ public class RoleDeserializer extends StdDeserializer<Role> {
         }
 
         // Create and return Role object
-        Role role = new Role();
-        role.setId(id);
-        role.setDescription(description);
-        role.setPrivileges(privileges);
+        Authority authority = new Authority();
+        authority.setId(id);
+        authority.setDescription(description);
+        authority.setPrivileges(privileges);
 
-        return role;
+        return authority;
     }
 }

@@ -15,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
-public class Role implements GrantedAuthority {
+public class Authority implements GrantedAuthority {
 
     @Id
     private String id;
@@ -23,8 +23,8 @@ public class Role implements GrantedAuthority {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "role_privileges",
-            joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
+            name = "authority_privileges",
+            joinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id")
     )
     private Set<Privilege> privileges = new HashSet<>();

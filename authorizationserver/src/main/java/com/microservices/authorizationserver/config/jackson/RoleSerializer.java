@@ -4,25 +4,25 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.microservices.authorizationserver.modal.Authority;
 import com.microservices.authorizationserver.modal.Privilege;
-import com.microservices.authorizationserver.modal.Role;
 
 import java.io.IOException;
 
-public class RoleSerializer extends StdSerializer<Role> {
+public class RoleSerializer extends StdSerializer<Authority> {
 
     public RoleSerializer() {
         this(null);
     }
 
-    public RoleSerializer(Class<Role> t) {
+    public RoleSerializer(Class<Authority> t) {
         super(t);
     }
 
     @Override
-    public void serialize(Role value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(Authority value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         gen.writeStartObject();
-        gen.writeStringField("@class", Role.class.getCanonicalName());
+        gen.writeStringField("@class", Authority.class.getCanonicalName());
         gen.writeStringField("id", String.valueOf(value.getId()));
         gen.writeStringField("desc", String.valueOf(value.getDescription()));
         gen.writeArrayFieldStart("privileges");
@@ -37,7 +37,7 @@ public class RoleSerializer extends StdSerializer<Role> {
         gen.writeEndObject();
     }
     @Override
-    public void serializeWithType(Role value, JsonGenerator gen, SerializerProvider serializers, TypeSerializer typeSer) throws IOException {
+    public void serializeWithType(Authority value, JsonGenerator gen, SerializerProvider serializers, TypeSerializer typeSer) throws IOException {
         serialize(value, gen, serializers);
     }
 }

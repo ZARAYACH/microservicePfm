@@ -35,9 +35,4 @@ public class DeviceController {
 		return "device-activated";
 	}
 
-	@GetMapping(value = "/")
-	public String success() {
-		return "device-activated";
-	}
-
 }

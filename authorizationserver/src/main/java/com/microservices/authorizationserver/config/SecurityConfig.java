@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -56,11 +55,9 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 import org.springframework.security.oauth2.server.authorization.token.*;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationConverter;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.logout.CompositeLogoutHandler;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -74,7 +71,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+import static com.microservices.authorizationserver.config.CustomClientMetadataConfig.configureCustomClientMetadataConverters;
 
 @Configuration
 @EnableWebSecurity
@@ -84,11 +81,14 @@ public class SecurityConfig {
     private static final String CUSTOM_CONSENT_PAGE_URI = "/oauth2/consent";
 
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http, RegisteredClientRepository registeredClientRepository)
             throws Exception {
+
         OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
                 OAuth2AuthorizationServerConfigurer.authorizationServer();
 
@@ -105,16 +105,15 @@ public class SecurityConfig {
                                     clientAuthenticationConfigurer.authenticationConverter(new PublicClientRefreshTokenAuthenticationConverter());
                                     clientAuthenticationConfigurer.authenticationProvider(new PublicClientRefreshTokenProvider(registeredClientRepository));
                                 })
-                                .oidc(Customizer.withDefaults())
+                                .oidc(oidc ->
+                                        oidc.clientRegistrationEndpoint(clientRegistrationEndpoint ->
+                                                clientRegistrationEndpoint.authenticationProviders(configureCustomClientMetadataConverters())))
                 )
                 .exceptionHandling((exceptions) -> exceptions
-                        .defaultAuthenticationEntryPointFor(
-                                new LoginUrlAuthenticationEntryPoint("/login"),
-                                new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-                        )
+                        .accessDeniedHandler(customAccessDeniedHandler)
                 ).oauth2ResourceServer(oauth2ResourceServer ->
-                        oauth2ResourceServer.jwt(Customizer.withDefaults()))
-                .authorizeHttpRequests(registry -> registry.anyRequest().authenticated() );
+                        oauth2ResourceServer.jwt(Customizer.withDefaults()));
+
         return http.build();
     }
 
@@ -127,6 +126,9 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                 .formLogin(formLoginConfigurer -> formLoginConfigurer.loginPage("/login"))
+                .exceptionHandling(configurer ->
+                        configurer
+                                .accessDeniedHandler(customAccessDeniedHandler))
                 .logout(logoutConfigurer -> logoutConfigurer.logoutUrl("/logout").addLogoutHandler(new CompositeLogoutHandler(
                         new CookieClearingLogoutHandler("JSESSIONID"),
                         new SecurityContextLogoutHandler()
@@ -140,32 +142,31 @@ public class SecurityConfig {
     @Bean
     public RegisteredClientRepository registeredClientRepository(ClientRepository clientRepository, @Qualifier("customObjectMapper") ObjectMapper objectMapper) {
         //TODO: this need to happen dynamically
-        // This is just an example of how a client should be like, there is already endpoints to add clients and fetch them "/profile/**" once you login
-        RegisteredClient messagingClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("chatBot-service")
-                .clientSecret(passwordEncoder().encode("123Aze456789@"))
-                .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
-                .authorizationGrantTypes(authorizationGrantTypes -> {
-                    authorizationGrantTypes.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
-                    authorizationGrantTypes.add(AuthorizationGrantType.REFRESH_TOKEN);
-                    authorizationGrantTypes.add(AuthorizationGrantType.AUTHORIZATION_CODE);
-                })
-                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/chatbot-service")
-                .redirectUri("http://127.0.0.1:8080/authorized")
-                .postLogoutRedirectUri("http://127.0.0.1:8080/logged-out")
-                .scope(OidcScopes.PROFILE)
-                .scope(OidcScopes.OPENID)
-                .scope("user.read")
-                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
-                .tokenSettings(TokenSettings.builder().reuseRefreshTokens(false)
-                        .deviceCodeTimeToLive(Duration.ofDays(90)).build())
-                .build();
+        // This is just an example of how a client should be like
+//        RegisteredClient messagingClient = RegisteredClient.withId(UUID.randomUUID().toString())
+//                .clientId("chatBot-service")
+//                .clientSecret(passwordEncoder().encode("123Aze456789@"))
+//                .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
+//                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+//                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
+//                .authorizationGrantTypes(authorizationGrantTypes -> {
+//                    authorizationGrantTypes.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
+//                    authorizationGrantTypes.add(AuthorizationGrantType.REFRESH_TOKEN);
+//                    authorizationGrantTypes.add(AuthorizationGrantType.AUTHORIZATION_CODE);
+//                })
+//                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/chatbot-service")
+//                .redirectUri("http://127.0.0.1:8080/authorized")
+//                .postLogoutRedirectUri("http://127.0.0.1:8080/logged-out")
+//                .scope(OidcScopes.PROFILE)
+//                .scope(OidcScopes.OPENID)
+//                .scope("user.read")
+//                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+//                .tokenSettings(TokenSettings.builder().reuseRefreshTokens(false)
+//                        .deviceCodeTimeToLive(Duration.ofDays(90)).build())
+//                .build();
 
-        JpaRegisteredClientRepository registeredClientRepository = new JpaRegisteredClientRepository(clientRepository, objectMapper);
-        registeredClientRepository.save(messagingClient);
-        return registeredClientRepository;
+        //        registeredClientRepository.save(messagingClient);
+        return new JpaRegisteredClientRepository(clientRepository, objectMapper);
     }
 
     @Bean
