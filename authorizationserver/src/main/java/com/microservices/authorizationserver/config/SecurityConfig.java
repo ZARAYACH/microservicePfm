@@ -110,7 +110,8 @@ public class SecurityConfig {
                                 })
                                 .oidc(oidc ->
                                         oidc.clientRegistrationEndpoint(clientRegistrationEndpoint ->
-                                                clientRegistrationEndpoint.authenticationProviders(configureCustomClientMetadataConverters())))
+                                                        clientRegistrationEndpoint.authenticationProviders(configureCustomClientMetadataConverters()))
+                                                .userInfoEndpoint(Customizer.withDefaults()))
                 )
                 .exceptionHandling((exceptions) -> exceptions
                         .accessDeniedHandler(customAccessDeniedHandler)
