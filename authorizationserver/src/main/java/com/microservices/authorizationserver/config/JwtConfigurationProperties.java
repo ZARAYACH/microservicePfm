@@ -13,7 +13,5 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class JwtConfigurationProperties {
     private String KeyPairsPath = "/home/authServer/keys" ;
-    private Long accessTokenValidityInSeconds = 900L;
-    private Long refreshTokenValidityInSeconds = 2628000L;
 
 }
