@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,7 +38,6 @@ import org.springframework.security.crypto.keygen.StringKeyGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.*;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
-import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
@@ -52,8 +50,6 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
-import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
-import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.oauth2.server.authorization.token.*;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationConverter;
@@ -68,12 +64,14 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.time.Duration;
 import java.time.Instant;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.microservices.authorizationserver.config.CustomClientMetadataConfig.configureCustomClientMetadataConverters;
 
@@ -265,11 +263,11 @@ public class SecurityConfig {
 
     OAuth2TokenCustomizer<JwtEncodingContext> customizer() {
         return context -> {
-            if (context.getTokenType().getValue().equals(OidcParameterNames.ID_TOKEN)) {
-                Authentication principle = context.getPrincipal();
-                Set<String> authorities = new HashSet<>();
-                for (GrantedAuthority authority : principle.getAuthorities())
-                    authorities.add(authority.getAuthority());
+            if (context.getTokenType().getValue().equals(OidcParameterNames.ID_TOKEN) ||
+                    context.getTokenType().getValue().equals(OAuth2TokenType.ACCESS_TOKEN.getValue())) {
+                Set<String> authorities = context.getPrincipal().getAuthorities().stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toSet());
                 context.getClaims().claim("authorities", authorities);
             }
         };
@@ -366,4 +364,5 @@ public class SecurityConfig {
             return PublicClientRefreshTokenAuthentication.class.isAssignableFrom(authentication);
         }
     }
+
 }

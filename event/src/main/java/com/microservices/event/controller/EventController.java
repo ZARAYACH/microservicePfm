@@ -10,6 +10,7 @@ import com.microservices.event.modal.Event;
 import com.microservices.event.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,18 +34,21 @@ public class EventController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_EVENT_ORGANISER')")
     @ResponseStatus(HttpStatus.CREATED)
     public EventDto createEvent(@RequestBody CreateEventDto createEventDto) throws BadArgumentException {
         return eventMapper.toEventDto(eventService.create(createEventDto));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_EVENT_ORGANISER')")
     public EventDto updateEvent(@PathVariable Long id, @RequestBody CreateEventDto updateEventDto) throws BadArgumentException, NotFoundException {
         Event event = eventService.findById(id);
         return eventMapper.toEventDto(eventService.update(event, updateEventDto));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_EVENT_ORGANISER')")
     public DeleteResponse deleteEvent(@PathVariable Long id) throws NotFoundException {
         Event event = eventService.findById(id);
         eventService.delete(event);
