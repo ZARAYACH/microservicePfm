@@ -2,7 +2,6 @@ package com.microservices.event.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.microservices.common.dtos.event.CreateEventDto;
 import com.microservices.common.dtos.event.EventDto;
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -53,9 +51,9 @@ public class EventControllerTest {
 
     @BeforeEach
     void setUp() {
-        event = new Event(1L, "Test Event", "concert", 20.0, "Venue", LocalDateTime.now().plusDays(1), 100, Collections.singleton(300L), LocalDateTime.now(), LocalDateTime.now());
+        event = new Event(1L, "Test Event", "concert", 20.0, "Venue", LocalDateTime.now().plusDays(1), 100,"organiser@email.com", LocalDateTime.now(), LocalDateTime.now());
         eventDto = new EventDto(1L, "Test Event", 20.0, "Venue", event.getDate(), 100, Collections.singleton(900L), LocalDateTime.now(), LocalDateTime.now());
-        createEventDto = new CreateEventDto("Test Event", 20.0, 100, "Venue", event.getDate(), "concert", Collections.singleton(900L));
+        createEventDto = new CreateEventDto("Test Event", 20.0, 100, "Venue", event.getDate(), "concert");
         mockMvc = MockMvcBuilders.standaloneSetup(eventController)
                 .setControllerAdvice(new EventExceptionHandler())
                 .build();
@@ -88,7 +86,7 @@ public class EventControllerTest {
 
     @Test
     void shouldCreateEvent() throws Exception {
-        when(eventService.create(any(CreateEventDto.class))).thenReturn(event);
+        when(eventService.create(any(CreateEventDto.class), any())).thenReturn(event);
         when(eventMapper.toEventDto(event)).thenReturn(eventDto);
 
         mockMvc.perform(post("/api/v1/events")
