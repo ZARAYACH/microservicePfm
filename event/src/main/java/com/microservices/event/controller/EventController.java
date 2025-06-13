@@ -5,6 +5,7 @@ import com.microservices.common.dtos.event.CreateEventDto;
 import com.microservices.common.dtos.event.EventDto;
 import com.microservices.common.exception.BadArgumentException;
 import com.microservices.common.exception.NotFoundException;
+import com.microservices.common.exception.UnauthenticatedException;
 import com.microservices.event.mapper.EventMapper;
 import com.microservices.event.modal.Event;
 import com.microservices.event.service.EventService;
@@ -43,9 +44,9 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
-    public EventDto updateEvent(@PathVariable Long id, @RequestBody CreateEventDto updateEventDto) throws BadArgumentException, NotFoundException {
+    public EventDto updateEvent(@PathVariable Long id, @RequestBody CreateEventDto updateEventDto, Principal principal) throws BadArgumentException, NotFoundException {
         Event event = eventService.findById(id);
-        return eventMapper.toEventDto(eventService.update(event, updateEventDto));
+        return eventMapper.toEventDto(eventService.update(event, updateEventDto, principal.getName()));
     }
 
     @DeleteMapping("/{id}")

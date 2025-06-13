@@ -28,6 +28,7 @@ public class EventService {
     @PreAuthorize("hasAuthority('ROLE_EVENT_ORGANISER')")
     public Event create(CreateEventDto createEventDto, String organiser) throws BadArgumentException {
         Event event = validateCreateEventDtoAndCreate(createEventDto);
+        event.setOrganiser(organiser);
         return eventRepository.save(event);
     }
 
@@ -55,8 +56,8 @@ public class EventService {
                 createEventDto.availableTickets(),
                 createEventDto.type());
     }
-    @PreAuthorize("hasAuthority('ROLE_EVENT_ORGANISER')")
-    public Event update(Event event, CreateEventDto updateEventDto) throws BadArgumentException {
+    @PreAuthorize("hasAuthority('ROLE_EVENT_ORGANISER') && event.organiser.equals(organiser)")
+    public Event update(Event event, CreateEventDto updateEventDto, String organiser) throws BadArgumentException {
         Event newEvent = validateCreateEventDtoAndCreate(updateEventDto);
 
         event.setName(newEvent.getName());
@@ -67,7 +68,7 @@ public class EventService {
 
         return eventRepository.save(newEvent);
     }
-    @PreAuthorize("hasAuthority('ROLE_EVENT_ORGANISER')")
+    @PreAuthorize("hasAuthority('ROLE_EVENT_ORGANISER') && event.organiser.equals(organiser)")
     public void delete(@NotNull Event event) {
         eventRepository.delete(event);
     }

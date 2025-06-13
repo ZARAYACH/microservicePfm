@@ -108,7 +108,7 @@ public class EventServiceTest {
 
         when(eventRepository.save(any(Event.class))).thenReturn(validEvent);
 
-        Event updated = eventService.update(validEvent, updateDto);
+        Event updated = eventService.update(validEvent, updateDto, validEvent.getOrganiser());
 
         assertNotNull(updated);
         verify(eventRepository).save(any(Event.class));
@@ -126,6 +126,6 @@ public class EventServiceTest {
                 LocalDateTime.now().minusDays(1),
                 "");
 
-        assertThrows(BadArgumentException.class, () -> eventService.update(validEvent, invalidDto));
+        assertThrows(BadArgumentException.class, () -> eventService.update(validEvent, invalidDto, validEvent.getOrganiser()));
     }
 }
