@@ -8,6 +8,7 @@ import com.microservices.event.modal.Event;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -24,8 +25,10 @@ public class EventService {
         return eventRepository.findAll();
     }
 
-    public Event create(CreateEventDto createEventDto) throws BadArgumentException {
+    @PreAuthorize("hasAuthority('ROLE_EVENT_ORGANISER')")
+    public Event create(CreateEventDto createEventDto, String organiser) throws BadArgumentException {
         Event event = validateCreateEventDtoAndCreate(createEventDto);
+        event.setOrganiser(organiser);
         return eventRepository.save(event);
     }
 
@@ -42,7 +45,6 @@ public class EventService {
             Assert.isTrue(StringUtils.isNotBlank(createEventDto.place()), "Event place can't be null or empty");
             Assert.isTrue(createEventDto.ticketPrice() > 0, "Event tickets price should be bigger than 0");
             Assert.isTrue(createEventDto.availableTickets() > 0, "Event available tickets should be bigger than 0");
-            Assert.isTrue(createEventDto.organiserIds() != null && !createEventDto.organiserIds().isEmpty(), "Organiser list can't be null nor empty");
             // Assert that organisers exists
         } catch (Exception e) {
             throw new BadArgumentException(e);
@@ -52,11 +54,10 @@ public class EventService {
                 createEventDto.place(),
                 createEventDto.date(),
                 createEventDto.availableTickets(),
-                createEventDto.type(),
-                createEventDto.organiserIds());
+                createEventDto.type());
     }
-
-    public Event update(Event event, CreateEventDto updateEventDto) throws BadArgumentException {
+    @PreAuthorize("hasAuthority('ROLE_EVENT_ORGANISER') && event.organiser.equals(organiser)")
+    public Event update(Event event, CreateEventDto updateEventDto, String organiser) throws BadArgumentException {
         Event newEvent = validateCreateEventDtoAndCreate(updateEventDto);
 
         event.setName(newEvent.getName());
@@ -67,7 +68,7 @@ public class EventService {
 
         return eventRepository.save(newEvent);
     }
-
+    @PreAuthorize("hasAuthority('ROLE_EVENT_ORGANISER') && event.organiser.equals(organiser)")
     public void delete(@NotNull Event event) {
         eventRepository.delete(event);
     }

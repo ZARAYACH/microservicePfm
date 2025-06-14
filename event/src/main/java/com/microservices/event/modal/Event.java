@@ -31,21 +31,19 @@ public class Event {
     private LocalDateTime date;
     private Integer availableTickets;
 
-    @Convert(converter = LongSetToJson.class)
-    private Set<Long> organiserIds;
+    private String organiser;//for now this now its only the email of the organizer later we can create a user's service or add user info to the auth server
 
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    public Event(String name, Double ticketPrice, String place, LocalDateTime date, Integer availableTickets, String type, Set<Long> organiserIds) {
+    public Event(String name, Double ticketPrice, String place, LocalDateTime date, Integer availableTickets, String type) {
         this.name = name;
         this.type = type;
         this.ticketPrice = ticketPrice;
         this.place = place;
         this.date = date;
-        this.organiserIds = organiserIds;
         this.availableTickets = availableTickets;
     }
 }

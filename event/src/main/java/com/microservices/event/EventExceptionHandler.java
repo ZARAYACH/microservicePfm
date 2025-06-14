@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 @Slf4j
+
 public class EventExceptionHandler implements ControllerAdviceExceptionHandler {
 
     @Override

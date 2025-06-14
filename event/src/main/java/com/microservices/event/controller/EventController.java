@@ -5,13 +5,18 @@ import com.microservices.common.dtos.event.CreateEventDto;
 import com.microservices.common.dtos.event.EventDto;
 import com.microservices.common.exception.BadArgumentException;
 import com.microservices.common.exception.NotFoundException;
+import com.microservices.common.exception.UnauthenticatedException;
 import com.microservices.event.mapper.EventMapper;
 import com.microservices.event.modal.Event;
 import com.microservices.event.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -34,14 +39,14 @@ public class EventController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EventDto createEvent(@RequestBody CreateEventDto createEventDto) throws BadArgumentException {
-        return eventMapper.toEventDto(eventService.create(createEventDto));
+    public EventDto createEvent(@RequestBody CreateEventDto createEventDto, Principal principal) throws BadArgumentException {
+        return eventMapper.toEventDto(eventService.create(createEventDto, principal.getName()));
     }
 
     @PutMapping("/{id}")
-    public EventDto updateEvent(@PathVariable Long id, @RequestBody CreateEventDto updateEventDto) throws BadArgumentException, NotFoundException {
+    public EventDto updateEvent(@PathVariable Long id, @RequestBody CreateEventDto updateEventDto, Principal principal) throws BadArgumentException, NotFoundException {
         Event event = eventService.findById(id);
-        return eventMapper.toEventDto(eventService.update(event, updateEventDto));
+        return eventMapper.toEventDto(eventService.update(event, updateEventDto, principal.getName()));
     }
 
     @DeleteMapping("/{id}")

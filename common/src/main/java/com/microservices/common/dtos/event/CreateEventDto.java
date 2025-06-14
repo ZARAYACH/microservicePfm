@@ -12,8 +12,6 @@ public record CreateEventDto(
         @NotNull Integer availableTickets,
         @NotNull @NotEmpty String place,
         @NotNull LocalDateTime date,
-        @NotNull @NotEmpty String type,
-        @NotNull Set<Long> organiserIds
-
+        @NotNull @NotEmpty String type
 ) {
 }

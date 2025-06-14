@@ -13,7 +13,7 @@ public record EventDto(
         @NotNull @NotEmpty String place,
         @NotNull LocalDateTime date,
         @NotNull Integer availableTickets,
-        @NotNull Set<Long> organiserIds,
+        @NotNull String organiser,
         @NotNull LocalDateTime createdAt,
         @NotNull LocalDateTime updatedAt
 ) {

@@ -2,7 +2,6 @@ package com.microservices.event.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.microservices.common.dtos.event.CreateEventDto;
 import com.microservices.common.dtos.event.EventDto;
@@ -17,13 +16,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -42,6 +40,9 @@ public class EventControllerTest {
     @Mock
     private EventMapper eventMapper;
 
+    @Mock
+    private Principal principal;
+
     @InjectMocks
     private EventController eventController;
 
@@ -50,12 +51,13 @@ public class EventControllerTest {
     private Event event;
     private EventDto eventDto;
     private CreateEventDto createEventDto;
+    private final static String TEST_USER_EMAIL = "test@email.com";
 
     @BeforeEach
     void setUp() {
-        event = new Event(1L, "Test Event", "concert", 20.0, "Venue", LocalDateTime.now().plusDays(1), 100, Collections.singleton(300L), LocalDateTime.now(), LocalDateTime.now());
-        eventDto = new EventDto(1L, "Test Event", 20.0, "Venue", event.getDate(), 100, Collections.singleton(900L), LocalDateTime.now(), LocalDateTime.now());
-        createEventDto = new CreateEventDto("Test Event", 20.0, 100, "Venue", event.getDate(), "concert", Collections.singleton(900L));
+        event = new Event(1L, "Test Event", "concert", 20.0, "Venue", LocalDateTime.now().plusDays(1), 100, TEST_USER_EMAIL, LocalDateTime.now(), LocalDateTime.now());
+        eventDto = new EventDto(1L, "Test Event", 20.0, "Venue", event.getDate(), 100, TEST_USER_EMAIL, LocalDateTime.now(), LocalDateTime.now());
+        createEventDto = new CreateEventDto("Test Event", 20.0, 100, "Venue", event.getDate(), "concert");
         mockMvc = MockMvcBuilders.standaloneSetup(eventController)
                 .setControllerAdvice(new EventExceptionHandler())
                 .build();
@@ -63,6 +65,7 @@ public class EventControllerTest {
         objectMapper = new ObjectMapper()
                 .registerModule(new JavaTimeModule())
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
     }
 
     @Test
@@ -88,10 +91,11 @@ public class EventControllerTest {
 
     @Test
     void shouldCreateEvent() throws Exception {
-        when(eventService.create(any(CreateEventDto.class))).thenReturn(event);
+        when(eventService.create(any(CreateEventDto.class), any())).thenReturn(event);
         when(eventMapper.toEventDto(event)).thenReturn(eventDto);
 
         mockMvc.perform(post("/api/v1/events")
+                        .principal(() -> TEST_USER_EMAIL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createEventDto)))
                 .andExpect(status().isCreated())
@@ -100,11 +104,13 @@ public class EventControllerTest {
 
     @Test
     void shouldUpdateEvent() throws Exception {
+
         when(eventService.findById(1L)).thenReturn(event);
-        when(eventService.update(eq(event), any(CreateEventDto.class))).thenReturn(event);
+        when(eventService.update(eq(event), any(CreateEventDto.class), eq(event.getOrganiser()))).thenReturn(event);
         when(eventMapper.toEventDto(event)).thenReturn(eventDto);
 
         mockMvc.perform(put("/api/v1/events/1")
+                        .principal(() -> TEST_USER_EMAIL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createEventDto)))
                 .andExpect(status().isOk())
@@ -116,7 +122,8 @@ public class EventControllerTest {
         when(eventService.findById(1L)).thenReturn(event);
         doNothing().when(eventService).delete(event);
 
-        mockMvc.perform(delete("/api/v1/events/1"))
+        mockMvc.perform(delete("/api/v1/events/1")
+                        .principal(() -> TEST_USER_EMAIL))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.deleted").value(true));
     }
