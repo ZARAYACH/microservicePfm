@@ -1,4 +1,4 @@
-package com.microservices.event;
+package com.microservices.reservation;
 
 import com.microservices.common.exception.BadArgumentException;
 import com.microservices.common.exception.ControllerAdviceExceptionHandler;
@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 @Slf4j
-
-public class EventExceptionHandler implements ControllerAdviceExceptionHandler {
+public class ReservationExceptionHandler implements ControllerAdviceExceptionHandler {
 
     @Override
     @ExceptionHandler(NotFoundException.class)
@@ -61,11 +60,10 @@ public class EventExceptionHandler implements ControllerAdviceExceptionHandler {
 
     }
 
-
     @ExceptionHandler(ServiceUnavailableException.class)
     @Override
     public ResponseEntity<ExceptionDto> handleServiceUnvailable(Exception ex) {
-        ExceptionDto dto = buildExceptionDto(new Exception("SERVICE UNAVAILABLE"), HttpStatus.SERVICE_UNAVAILABLE);
+        ExceptionDto dto = buildExceptionDto(new Exception("SERVICE UNAVAILABLE "), HttpStatus.SERVICE_UNAVAILABLE);
         log.error("Exception #{}", dto.getErrorId(), ex);
         return buildResponse(dto);
     }

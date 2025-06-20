@@ -25,3 +25,13 @@ springdoc.remove-broken-reference-definitions=false
 
 spring.security.oauth2.resourceserver.jwt.issuer-uri=${OAUTH2_JWT_ISSUER_URI:http://localhost:9000}
 spring.security.oauth2.resourceserver.jwt.jwk-set-uri=${OAUTH2_JWK_SET_URI:http://localhost:9000/oauth2/jwks}
+
+spring.security.oauth2.client.registration.event-service-client.provider=authServer
+spring.security.oauth2.client.registration.event-service-client.client-id=${OAUTH_CLIENT_ID:eventService}
+spring.security.oauth2.client.registration.event-service-client.client-secret=${OAUTH_CLIENT_SECRET:123Aze456789@}
+spring.security.oauth2.client.registration.event-service-client.authorization-grant-type=authorization_code,client_credentials
+spring.security.oauth2.client.registration.event-service-client.client-authentication-method=client_secret_basic
+spring.security.oauth2.client.registration.event-service-client.scope=${OAUTH_CLIENT_SCOPE:openid,profile}
+
+
+spring.security.oauth2.client.provider.authServer.issuer-uri=${OAUTH2_JWT_ISSUER_URI:http://localhost:9000}

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Objects;
 
@@ -20,6 +21,9 @@ public interface ControllerAdviceExceptionHandler {
     ResponseEntity<ExceptionDto> handleAuthentication(AuthenticationException ex);
 
     ResponseEntity<ExceptionDto> handleEntityExists(EntityExistsException ex);
+
+    @ExceptionHandler(ServiceUnavailableException.class)
+    ResponseEntity<ExceptionDto> handleServiceUnvailable(Exception ex);
 
     // Don't ever expose the error
     ResponseEntity<ExceptionDto> handleGeneric(Exception ex);
