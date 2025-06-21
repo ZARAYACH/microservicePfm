@@ -53,7 +53,7 @@ jobs:
             for module in "${MODULES[@]}"; do
                 IMAGE=ghcr.io/zarayach/microservices-pfm/${module}:${VERSION}
                 echo "Building and pushing $IMAGE"
-                docker build -t $IMAGE ./$module --label built-by=github-actions --label build-version=$VERSION ./$module
+                docker build -t $IMAGE --label built-by=github-actions --label build-version=$VERSION ./$module
                 docker push $IMAGE
             done
       - name: Publishing release and tags in github
