@@ -9,6 +9,13 @@ import com.microservices.payment.config.PaymentServiceProperties;
 import com.microservices.payment.modal.Payment;
 import com.microservices.payment.modal.PaymentInfoDto;
 import com.microservices.payment.repository.PaymentRepository;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.ByteArrayOutputStream;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +25,7 @@ import org.springframework.util.Assert;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 @Service
 @RequiredArgsConstructor
@@ -100,6 +108,75 @@ public class PaymentService {
             throw new PaymentException(e);
         }
     }
+
+    public byte[] generateReceiptPdf(Payment payment) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        try {
+            Document document = new Document();
+            PdfWriter.getInstance(document, out);
+            document.open();
+
+            // Custom fonts
+            Font titleFont = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD, BaseColor.WHITE);
+            Font labelFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.DARK_GRAY);
+            Font valueFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.BLACK);
+
+            // Header section
+            PdfPTable headerTable = new PdfPTable(1);
+            headerTable.setWidthPercentage(100);
+            PdfPCell headerCell = new PdfPCell(new Phrase("Payment Receipt", titleFont));
+            headerCell.setBackgroundColor(new BaseColor(129, 117, 211)); // violet
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setPadding(15);
+            headerCell.setBorder(Rectangle.NO_BORDER);
+            headerTable.addCell(headerCell);
+            document.add(headerTable);
+
+            document.add(Chunk.NEWLINE);
+
+            // Data section
+            PdfPTable infoTable = new PdfPTable(2);
+            infoTable.setWidthPercentage(100);
+            infoTable.setSpacingBefore(10f);
+            infoTable.setSpacingAfter(10f);
+            infoTable.setWidths(new float[]{1, 2});
+
+            // Helper to add a row
+            BiConsumer<String, String> addRow = (label, value) -> {
+                PdfPCell cell1 = new PdfPCell(new Phrase(label, labelFont));
+                cell1.setBorder(Rectangle.NO_BORDER);
+                cell1.setPadding(5);
+
+                PdfPCell cell2 = new PdfPCell(new Phrase(value, valueFont));
+                cell2.setBorder(Rectangle.NO_BORDER);
+                cell2.setPadding(5);
+
+                infoTable.addCell(cell1);
+                infoTable.addCell(cell2);
+            };
+
+            addRow.accept("Payment ID:", payment.getId());
+            addRow.accept("Status:", String.valueOf(payment.getStatus()));
+            addRow.accept("Amount:", String.valueOf(payment.getAmount()));
+            addRow.accept("Created At:", String.valueOf(payment.getCreatedAt()));
+
+            document.add(infoTable);
+
+            // Footer
+            Paragraph footer = new Paragraph("Thank you for your payment.", new Font(Font.FontFamily.HELVETICA, 12, Font.ITALIC, BaseColor.GRAY));
+            footer.setAlignment(Element.ALIGN_CENTER);
+            footer.setSpacingBefore(30f);
+            document.add(footer);
+
+            document.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return out.toByteArray();
+    }
+
 
     public void cancelPayment(Payment payment) {
         payment.setStatus(PaymentStatus.CANCELLED);

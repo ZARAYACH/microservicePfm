@@ -28,6 +28,7 @@ public class JWTSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/process/payments/*",
+                                "/api/v1/payments/*/receipt",
                                 "/api/v1/process/payments/*/cancel",
                                 "/swagger-ui.html",
                                 "/swagger-ui/*", "/api/v1/api-docs").permitAll()

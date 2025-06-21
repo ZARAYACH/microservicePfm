@@ -5,11 +5,14 @@ import com.microservices.common.dtos.payment.CreatePaymentDto;
 import com.microservices.common.dtos.payment.PaymentDto;
 import com.microservices.common.exception.BadArgumentException;
 import com.microservices.common.exception.NotFoundException;
-import com.microservices.common.exception.PaymentException;
 import com.microservices.payment.mapper.PaymentMapper;
 import com.microservices.payment.modal.Payment;
 import com.microservices.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,8 +35,20 @@ public class PaymentController {
         return paymentMapper.toPaymentDto(paymentService.findById(id));
     }
 
+    @GetMapping("/{id}/receipt")
+    public ResponseEntity<byte[]> downloadReceipt(@PathVariable String id) throws NotFoundException, BadArgumentException {
+        Payment payment = paymentService.findById(id);
+        byte[] pdf = paymentService.generateReceiptPdf(payment);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", String.format("receipt_%s.pdf", payment.getId()));
+
+        return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
+    }
+
     @PostMapping
-    public PaymentDto createPayment(@RequestBody CreatePaymentDto createPaymentDto) throws PaymentException, BadArgumentException {
+    public PaymentDto createPayment(@RequestBody CreatePaymentDto createPaymentDto) throws BadArgumentException {
         return paymentMapper.toPaymentDto(paymentService.createPayment(createPaymentDto));
     }
 
@@ -43,5 +58,4 @@ public class PaymentController {
         paymentService.delete(payment);
         return new DeleteResponse(true);
     }
-
 }
