@@ -43,31 +43,23 @@ public class MockPaymentServiceTest {
     @Test
     void processPayment_shouldSucceed_withValidCard() throws PaymentException, BadArgumentException {
         CreatePaymentDto dto = new CreatePaymentDto(44, "test-01", "http://localhost:8080/callbadck", "http://localhost:8080/webhook");
-
         Payment mockEntity = new Payment("1", "flan", "flan@email.com", 44, "test-01", "http://localhost:8080/callbadck", PaymentStatus.PENDING, "http://localhost:8080/payment", "http://localhost:8080/webhook", LocalDateTime.now(), LocalDateTime.now());
-
         when(repository.save(any(Payment.class))).thenReturn(mockEntity);
-
         Payment result = service.createPayment(dto);
-
         assertNotNull(result);
     }
 
     @Test
     void processPayment_shouldFail_withInvalidCard() {
         CreatePaymentDto dto = new CreatePaymentDto(0, "test-01", "http://localhost:8080/callbadck", "http://localhost:8080/webhook");
-
         assertThrows(BadArgumentException.class, () -> service.createPayment(dto));
     }
 
     @Test
     void getById_shouldReturnResponseIfExists() throws BadArgumentException, NotFoundException {
         Payment payment = new Payment();
-
         when(repository.findById("1")).thenReturn(Optional.of(payment));
-
         Payment result = service.findById("1");
-
         assertNotNull(result);
     }
 }
