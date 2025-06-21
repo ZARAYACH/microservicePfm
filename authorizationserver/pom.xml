@@ -6,12 +6,12 @@
     <parent>
         <groupId>com.microservices</groupId>
         <artifactId>pfm</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
 
 
     <artifactId>authorizationserver</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <distributionManagement>
         <repository>
