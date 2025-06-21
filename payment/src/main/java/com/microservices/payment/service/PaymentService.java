@@ -63,7 +63,6 @@ public class PaymentService {
     public Payment createPayment(@NotNull CreatePaymentDto createPaymentDto) throws BadArgumentException {
         Payment payment = validatePaymentDtoAndCreate(createPaymentDto);
         payment.setPaymentUrl(paymentServiceProperties.getRootUrl() + PAYMENT_URL + payment.getId());
-
         return paymentRepository.save(payment);
 
     }
