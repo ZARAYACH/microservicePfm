@@ -49,7 +49,7 @@ jobs:
       - name:  Build and Push Docker Images to The container registry
         run: |
           VERSION=${{ github.event.inputs.releaseVersion }}
-          MODULES=("event" "notification" "payment" "reservation")
+          MODULES=("event" "notification" "payment" "reservation" "authorizationserver")
             for module in "${MODULES[@]}"; do
                 IMAGE=ghcr.io/zarayach/microservices-pfm/${module}:${VERSION}
                 echo "Building and pushing $IMAGE"
