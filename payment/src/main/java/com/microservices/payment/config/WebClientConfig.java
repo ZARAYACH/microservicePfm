@@ -1,4 +1,5 @@
-package com.microservices.reservation.config;
+package com.microservices.payment.config;
+
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -6,25 +7,24 @@ import org.springframework.security.oauth2.client.*;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
-import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.WebClient;
+
 
 @Configuration
 public class WebClientConfig {
 
-
     @Bean
     public OAuth2AuthorizedClientManager authorizedClientManager(
             ClientRegistrationRepository registrations,
-            OAuth2AuthorizedClientService clientService) {
+            OAuth2AuthorizedClientRepository repository) {
 
         OAuth2AuthorizedClientProvider provider = OAuth2AuthorizedClientProviderBuilder.builder()
                 .clientCredentials()
                 .build();
 
-        AuthorizedClientServiceOAuth2AuthorizedClientManager manager =
-                new AuthorizedClientServiceOAuth2AuthorizedClientManager(registrations, clientService);
+        DefaultOAuth2AuthorizedClientManager manager =
+                new DefaultOAuth2AuthorizedClientManager(registrations, repository);
         manager.setAuthorizedClientProvider(provider);
 
         return manager;
@@ -35,8 +35,8 @@ public class WebClientConfig {
         return WebClient.builder()
                 .filter((request, next) -> {
                     OAuth2AuthorizeRequest authRequest = OAuth2AuthorizeRequest
-                            .withClientRegistrationId("reservation-service-client")
-                            .principal("reservationService")
+                            .withClientRegistrationId("payment-service-client")
+                            .principal("paymentService")
                             .build();
 
                     OAuth2AuthorizedClient client = manager.authorize(authRequest);
@@ -52,6 +52,5 @@ public class WebClientConfig {
                 })
                 .build();
     }
-
 
 }

@@ -1,28 +1,27 @@
-package com.microservices.reservation;
+package com.microservices.payment;
 
-import com.microservices.common.exception.BadArgumentException;
-import com.microservices.common.exception.ControllerAdviceExceptionHandler;
-import com.microservices.common.exception.NotFoundException;
-import com.microservices.common.exception.ServiceUnavailableException;
+import com.microservices.common.exception.*;
 import com.microservices.common.exception.modal.ExceptionDto;
 import jakarta.persistence.EntityExistsException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import static com.microservices.common.exception.ControllerAdviceExceptionHandler.*;
 
 @ControllerAdvice
 @Slf4j
-public class ReservationExceptionHandler implements ControllerAdviceExceptionHandler {
+public class EventExceptionHandler implements ControllerAdviceExceptionHandler {
 
     @Override
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler({NotFoundException.class, NoResourceFoundException.class})
     public ResponseEntity<ExceptionDto> handleNotFound(NotFoundException ex) {
         ExceptionDto dto = buildExceptionDto(ex, HttpStatus.NOT_FOUND);
         log.debug("Exception #{}", dto.getErrorId(), ex);
@@ -30,7 +29,7 @@ public class ReservationExceptionHandler implements ControllerAdviceExceptionHan
     }
 
     @Override
-    @ExceptionHandler({BadArgumentException.class, HttpMessageNotReadableException.class})
+    @ExceptionHandler(BadArgumentException.class)
     public ResponseEntity<ExceptionDto> handleBadArgument(BadArgumentException ex) {
         ExceptionDto dto = buildExceptionDto(ex, HttpStatus.BAD_REQUEST);
         log.debug("Exception #{}", dto.getErrorId(), ex);
@@ -66,9 +65,18 @@ public class ReservationExceptionHandler implements ControllerAdviceExceptionHan
     @Override
     @ExceptionHandler(ServiceUnavailableException.class)
     public ResponseEntity<ExceptionDto> handleServiceUnavailable(Exception ex) {
-        ExceptionDto dto = buildExceptionDto(new Exception("SERVICE UNAVAILABLE "), HttpStatus.SERVICE_UNAVAILABLE);
-        log.error("Exception #{}", dto.getErrorId(), ex);
+        ExceptionDto dto = buildExceptionDto(ex, HttpStatus.SERVICE_UNAVAILABLE);
+        log.debug("Exception #{}", dto.getErrorId(), ex);
         return buildResponse(dto);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handlePaymentException(PaymentException ex, Model model) {
+        ExceptionDto dto = buildExceptionDto(ex, HttpStatus.BAD_REQUEST);
+        model.addAttribute("exceptionDto", dto);
+        log.error("Exception #{}", dto.getErrorId(), ex);
+        return "payment-page-error";
     }
 
     @Override

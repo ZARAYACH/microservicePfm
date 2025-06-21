@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -27,6 +28,15 @@ public class Reservation {
 
     @Enumerated(EnumType.STRING)
     private ReservationStatus status = ReservationStatus.PENDING;
+
+    @Column(unique = true, nullable = false)
+    private String paymentId;
+    private String paymentUrl;
+    @Column(unique = true, nullable = false)
+    private String orderId = UUID.randomUUID().toString();
+
+    @Column(nullable = false)
+    private Integer quantity;
 
     @CreationTimestamp
     private LocalDateTime createdAt = LocalDateTime.now();

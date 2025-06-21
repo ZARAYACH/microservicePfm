@@ -36,7 +36,7 @@ public class ReservationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public List<ReservationDto> createReservation(@RequestBody CreateReservationDto createReservationDto, Principal principal) throws BadArgumentException, ServiceUnavailableException {
+    public ReservationDto createReservation(@RequestBody CreateReservationDto createReservationDto, Principal principal) throws BadArgumentException, ServiceUnavailableException {
         return reservationMapper.toReservationDto(reservationService.create(createReservationDto, principal.getName()));
     }
 

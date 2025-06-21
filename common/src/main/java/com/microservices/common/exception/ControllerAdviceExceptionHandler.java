@@ -22,8 +22,7 @@ public interface ControllerAdviceExceptionHandler {
 
     ResponseEntity<ExceptionDto> handleEntityExists(EntityExistsException ex);
 
-    @ExceptionHandler(ServiceUnavailableException.class)
-    ResponseEntity<ExceptionDto> handleServiceUnvailable(Exception ex);
+    ResponseEntity<ExceptionDto> handleServiceUnavailable(Exception ex);
 
     // Don't ever expose the error
     ResponseEntity<ExceptionDto> handleGeneric(Exception ex);
@@ -32,7 +31,7 @@ public interface ControllerAdviceExceptionHandler {
         return new ResponseEntity<>(dto, Objects.requireNonNull(HttpStatus.resolve(dto.getStatus())));
     }
 
-    default ExceptionDto buildExceptionDto(Exception ex, HttpStatus status) {
+    static ExceptionDto buildExceptionDto(Exception ex, HttpStatus status) {
         return ExceptionDto.builder()
                 .message(ex.getMessage())
                 .status(status.value())
