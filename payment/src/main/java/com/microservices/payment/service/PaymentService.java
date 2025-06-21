@@ -12,7 +12,6 @@ import com.microservices.payment.repository.PaymentRepository;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -24,10 +23,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PaymentService {
 
+    private final static String PAYMENT_URL = "/api/v1/process/payments/";
     private final PaymentRepository paymentRepository;
     private final PaymentServiceProperties paymentServiceProperties;
-
-    private final static String PAYMENT_URL = "/api/v1/process/payments/";
 
     public List<Payment> list() {
         return paymentRepository.findAll();

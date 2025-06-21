@@ -3,8 +3,8 @@ package com.microservices.event.service;
 import com.microservices.common.dtos.event.CreateEventDto;
 import com.microservices.common.exception.BadArgumentException;
 import com.microservices.common.exception.NotFoundException;
-import com.microservices.event.EventRepository;
 import com.microservices.event.modal.Event;
+import com.microservices.event.repository.EventRepository;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -56,6 +56,7 @@ public class EventService {
                 createEventDto.availableTickets(),
                 createEventDto.type());
     }
+
     @PreAuthorize("hasAuthority('ROLE_EVENT_ORGANISER') && event.organiser.equals(organiser)")
     public Event update(Event event, CreateEventDto updateEventDto, String organiser) throws BadArgumentException {
         Event newEvent = validateCreateEventDtoAndCreate(updateEventDto);
@@ -68,6 +69,7 @@ public class EventService {
 
         return eventRepository.save(newEvent);
     }
+
     @PreAuthorize("hasAuthority('ROLE_EVENT_ORGANISER') && event.organiser.equals(organiser)")
     public void delete(@NotNull Event event) {
         eventRepository.delete(event);

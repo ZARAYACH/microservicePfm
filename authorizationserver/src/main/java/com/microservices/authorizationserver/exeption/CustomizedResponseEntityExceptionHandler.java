@@ -1,10 +1,10 @@
 package com.microservices.authorizationserver.exeption;
 
+import com.microservices.authorizationserver.exeption.modal.ExceptionDto;
 import jakarta.annotation.Priority;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import com.microservices.authorizationserver.exeption.modal.ExceptionDto;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

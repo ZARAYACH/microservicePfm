@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import static com.microservices.common.exception.ControllerAdviceExceptionHandler.*;
+import static com.microservices.common.exception.ControllerAdviceExceptionHandler.buildExceptionDto;
 
 @ControllerAdvice
 @Slf4j

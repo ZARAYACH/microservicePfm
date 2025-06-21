@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,7 +26,7 @@ public class JWTSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/reservations/**").hasAnyAuthority("ROLE_EVENT_ORGANISER","ROLE_USER")
+                        .requestMatchers("/api/v1/reservations/**").hasAnyAuthority("ROLE_EVENT_ORGANISER", "ROLE_USER")
                         .requestMatchers("/api/v1/webhooks/payments").hasAuthority("SCOPE_payment")
                         .requestMatchers("/api/v1/api-docs/**",
                                 "/swagger-ui.html",

@@ -12,5 +12,6 @@ import java.util.List;
 public interface ReservationMapper {
 
     ReservationDto toReservationDto(Reservation reservation);
+
     List<ReservationDto> toReservationDto(List<Reservation> reservations);
 }

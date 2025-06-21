@@ -31,7 +31,7 @@ public class PaymentController {
     public PaymentDto getPayment(@PathVariable String id) throws BadArgumentException, NotFoundException {
         return paymentMapper.toPaymentDto(paymentService.findById(id));
     }
- 
+
     @PostMapping
     public PaymentDto createPayment(@RequestBody CreatePaymentDto createPaymentDto) throws PaymentException, BadArgumentException {
         return paymentMapper.toPaymentDto(paymentService.createPayment(createPaymentDto));

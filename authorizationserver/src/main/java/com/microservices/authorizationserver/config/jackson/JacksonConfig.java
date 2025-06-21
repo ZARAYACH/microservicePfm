@@ -1,6 +1,6 @@
 package com.microservices.authorizationserver.config.jackson;
 
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.microservices.authorizationserver.modal.Authority;
 import com.microservices.authorizationserver.modal.User;
@@ -15,6 +15,7 @@ public class JacksonConfig {
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
+
     @Bean(value = "customObjectMapper")
     public ObjectMapper customObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();

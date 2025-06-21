@@ -10,10 +10,10 @@ import lombok.Setter;
 public class ServiceProperties {
 
     public final static String SERVICE_PROPERTIES_PREFIX = "services";
+    @NotNull(message = "root-url must not be null")
+    private String rootUrl;
 
     public ServiceProperties(String rootUrl) {
         this.rootUrl = rootUrl;
     }
-    @NotNull(message = "root-url must not be null")
-    private String rootUrl;
 }

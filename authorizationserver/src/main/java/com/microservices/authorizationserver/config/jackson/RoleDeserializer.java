@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.microservices.authorizationserver.modal.Privilege;
 import com.microservices.authorizationserver.modal.Authority;
+import com.microservices.authorizationserver.modal.Privilege;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -22,7 +22,7 @@ public class RoleDeserializer extends StdDeserializer<Authority> {
     }
 
     @Override
-    public Authority deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException  {
+    public Authority deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
         JsonNode node = jp.getCodec().readTree(jp);
 
         String id = node.get("id").asText();

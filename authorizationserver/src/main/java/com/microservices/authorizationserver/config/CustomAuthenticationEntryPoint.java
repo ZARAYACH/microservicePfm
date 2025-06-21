@@ -1,11 +1,11 @@
 package com.microservices.authorizationserver.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microservices.authorizationserver.exeption.modal.ExceptionDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import com.microservices.authorizationserver.exeption.modal.ExceptionDto;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

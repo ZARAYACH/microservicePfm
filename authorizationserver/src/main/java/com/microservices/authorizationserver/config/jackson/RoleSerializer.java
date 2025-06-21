@@ -26,7 +26,7 @@ public class RoleSerializer extends StdSerializer<Authority> {
         gen.writeStringField("id", String.valueOf(value.getId()));
         gen.writeStringField("desc", String.valueOf(value.getDescription()));
         gen.writeArrayFieldStart("privileges");
-        for (Privilege privilege : value.getPrivileges()){
+        for (Privilege privilege : value.getPrivileges()) {
             gen.writeStartObject();
             gen.writeStringField("@class", Privilege.class.getCanonicalName());
             gen.writeStringField("id", String.valueOf(privilege.getId()));
@@ -36,6 +36,7 @@ public class RoleSerializer extends StdSerializer<Authority> {
         gen.writeEndArray();
         gen.writeEndObject();
     }
+
     @Override
     public void serializeWithType(Authority value, JsonGenerator gen, SerializerProvider serializers, TypeSerializer typeSer) throws IOException {
         serialize(value, gen, serializers);

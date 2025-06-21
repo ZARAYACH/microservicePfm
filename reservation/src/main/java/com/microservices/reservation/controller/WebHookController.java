@@ -3,7 +3,6 @@ package com.microservices.reservation.controller;
 import com.microservices.common.dtos.payment.PaymentWebHookPayloadDto;
 import com.microservices.common.exception.NotFoundException;
 import com.microservices.common.exception.ServiceUnavailableException;
-import com.microservices.common.exception.modal.ExceptionDto;
 import com.microservices.reservation.modal.Reservation;
 import com.microservices.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,7 @@ public class WebHookController {
                 buildExceptionDto(e, HttpStatus.SERVICE_UNAVAILABLE);
                 log.error("Couldn't signal reservation status update for reservation #" + reservation.getId(), e);
             }
-        } );
+        });
 
     }
 }
