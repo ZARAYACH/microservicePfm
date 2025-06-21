@@ -5,11 +5,11 @@
 	<parent>
 		<groupId>com.microservices</groupId>
 		<artifactId>pfm</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>payment</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Payment</name>
 	<description>Payment</description>
@@ -62,7 +62,7 @@
 		<dependency>
 			<groupId>com.microservices</groupId>
 			<artifactId>common</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 
 		</dependency>
 
