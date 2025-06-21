@@ -24,8 +24,6 @@ springdoc.swagger-ui.path=/swagger-ui.html
 springdoc.remove-broken-reference-definitions=false
 
 
-spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:9000
-spring.security.oauth2.resourceserver.jwt.jwk-set-uri=http://localhost:9000/oauth2/jwks
 #OAuth2 client conf
 
 spring.security.oauth2.client.registration.reservation-service-client.provider=authServer
@@ -36,7 +34,10 @@ spring.security.oauth2.client.registration.reservation-service-client.client-aut
 spring.security.oauth2.client.registration.reservation-service-client.scope=${OAUTH_CLIENT_SCOPE:openid,profile,event,payment}
 
 
-spring.security.oauth2.client.provider.authServer.issuer-uri=http://localhost:9000
+spring.security.oauth2.client.provider.authServer.issuer-uri=${OAUTH2_JWT_ISSUER_URI}
+spring.security.oauth2.resourceserver.jwt.issuer-uri=${OAUTH2_JWT_ISSUER_URI}
+spring.security.oauth2.resourceserver.jwt.jwk-set-uri=${OAUTH2_JWK_SET_URI}
+
 
 services.root-url=${SERVICES_ROOT_URL:http://localhost:8081}
 services.payment-service-url=${SERVICES_PAYMENT_URL:http://localhost:8090}
