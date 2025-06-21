@@ -1,13 +1,8 @@
 spring.application.name=Payment
-server.port=8090
-
-root.url=http://localhost:8090
-
-
+server.port=${SERVER_PORT:8090}
 spring.datasource.url=jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3307}/${DB_NAME:microservice_pfm_payment}?createDatabaseIfNotExist=true&autoReconnect=true
 spring.datasource.username=${DB_USER:root}
 spring.datasource.password=${DB_PASSWORD:root}
-
 spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
 spring.datasource.tomcat.test-on-return=true
 spring.datasource.validationQuery=SELECT 1
@@ -19,24 +14,22 @@ spring.jpa.defer-datasource-initialization=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
 spring.datasource.tomcat.test-on-borrow=true
 spring.datasource.tomcat.validation-query=SELECT 1
-
 springdoc.swagger-ui.with-credentials=true
 springdoc.show-login-endpoint=true
 springdoc.api-docs.path=/api/v1/api-docs
 springdoc.swagger-ui.path=/swagger-ui.html
 springdoc.remove-broken-reference-definitions=false
-
 #spring.security.oauth2.authorizationserver.issuer=http://localhost:9000
-
-spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:9000
-spring.security.oauth2.resourceserver.jwt.jwk-set-uri=http://localhost:9000/oauth2/jwks
+spring.security.oauth2.resourceserver.jwt.issuer-uri=${OAUTH2_JWT_ISSUER_URI:http://localhost:9000}
+spring.security.oauth2.resourceserver.jwt.jwk-set-uri=${OAUTH2_JWK_SET_URI:http://localhost:9000/oauth2/jwks}
 #OAuth2 client conf
-
 spring.security.oauth2.client.registration.payment-service-client.provider=authServer
 spring.security.oauth2.client.registration.payment-service-client.client-id=${OAUTH_CLIENT_ID:paymentService}
 spring.security.oauth2.client.registration.payment-service-client.client-secret=${OAUTH_CLIENT_SECRET:123Aze456789@}
 spring.security.oauth2.client.registration.payment-service-client.authorization-grant-type=client_credentials
 spring.security.oauth2.client.registration.payment-service-client.client-authentication-method=client_secret_basic
 spring.security.oauth2.client.registration.payment-service-client.scope=${OAUTH_CLIENT_SCOPE:openid,profile,event,payment}
-
-spring.security.oauth2.client.provider.authServer.issuer-uri=http://localhost:9000
+spring.security.oauth2.client.provider.authServer.issuer-uri=${OAUTH2_JWT_ISSUER_URI:http://localhost:9000}
+services.root-url=${SERVICES_ROOT_URL:http://localhost:8090}
+services.event-service-url=${SERVICES_EVENT_URL:http://localhost:8080}
+services.reservation-service-url=${SERVICES_RESERVATION_URL:http://localhost:8081}
