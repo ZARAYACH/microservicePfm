@@ -5,7 +5,6 @@ import com.microservices.common.dtos.payment.CreatePaymentDto;
 import com.microservices.common.dtos.payment.PaymentDto;
 import com.microservices.common.exception.BadArgumentException;
 import com.microservices.common.exception.NotFoundException;
-import com.microservices.common.exception.PaymentException;
 import com.microservices.payment.mapper.PaymentMapper;
 import com.microservices.payment.modal.Payment;
 import com.microservices.payment.service.PaymentService;
@@ -43,13 +42,13 @@ public class PaymentController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("attachment", STR."receipt_\{id}.pdf");
+        headers.setContentDispositionFormData("attachment", String.format("receipt_%s.pdf", payment.getId()));
 
         return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
     }
 
     @PostMapping
-    public PaymentDto createPayment(@RequestBody CreatePaymentDto createPaymentDto) throws PaymentException, BadArgumentException {
+    public PaymentDto createPayment(@RequestBody CreatePaymentDto createPaymentDto) throws BadArgumentException {
         return paymentMapper.toPaymentDto(paymentService.createPayment(createPaymentDto));
     }
 
