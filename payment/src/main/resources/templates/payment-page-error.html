@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 </head>
 
 <body>
@@ -105,8 +105,8 @@
 <div class="container">
     <div class="row">
         <form action="https://google.com">
-        <div class="column" style="text-align: center; margin: 0 2rem">
-            <h1 style="color: #830000" th:text="'Ooops !!!, error ' + ${exceptionDto.getStatus()}"></h1>
+            <div class="column" style="text-align: center; margin: 0 2rem">
+                <h1 style="color: #830000" th:text="'Ooops !!!, error ' + ${exceptionDto.getStatus()}"></h1>
                 <div style="text-align: left; margin: 2rem 0">
                     Id : <span style="font-weight: bold" th:text="${exceptionDto.getErrorId()}"></span><br>
                     message : <span th:text="${exceptionDto.getMessage()}"></span><br>
@@ -114,8 +114,8 @@
                     Timestamp : <span th:text="${exceptionDto.getTimestamp()}"></span><br>
                 </div>
 
-            <button type="submit"  class="btn">Cancel</button>
-        </div>
+                <button class="btn" type="submit">Cancel</button>
+            </div>
 
         </form>
     </div>

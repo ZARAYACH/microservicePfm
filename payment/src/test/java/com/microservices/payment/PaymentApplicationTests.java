@@ -18,36 +18,36 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class PaymentApplicationTests {
 
-	@MockitoBean
-	ClientRegistrationRepository ClientRegistrationRepository;
-	@MockitoBean
-	OAuth2AuthorizedClientRepository OAuth2AuthorizedClientRepository;
+    @MockitoBean
+    ClientRegistrationRepository ClientRegistrationRepository;
+    @MockitoBean
+    OAuth2AuthorizedClientRepository OAuth2AuthorizedClientRepository;
 
-	@Autowired
-	private PaymentService service;
-	@Autowired
-	private PaymentRepository repository;
+    @Autowired
+    private PaymentService service;
+    @Autowired
+    private PaymentRepository repository;
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
-	@Test
-	void testSuccessfulPaymentProcessing() throws Exception {
-		CreatePaymentDto dto = new CreatePaymentDto(44,"test-01","http://localhost:8080/callbadck","http://localhost:8080/webhook");
+    @Test
+    void testSuccessfulPaymentProcessing() throws Exception {
+        CreatePaymentDto dto = new CreatePaymentDto(44, "test-01", "http://localhost:8080/callbadck", "http://localhost:8080/webhook");
 
-		Payment response = service.createPayment(dto);
+        Payment response = service.createPayment(dto);
 
-		assertNotNull(response);
+        assertNotNull(response);
 
-		Optional<Payment> saved = repository.findAll().stream().findFirst();
-		assertTrue(saved.isPresent());
-		assertEquals("test-01", saved.get().getOrderId());
-	}
+        Optional<Payment> saved = repository.findAll().stream().findFirst();
+        assertTrue(saved.isPresent());
+        assertEquals("test-01", saved.get().getOrderId());
+    }
 
     @Test
     void testGetByIdReturnsSavedPayment() throws Exception {
-		CreatePaymentDto dto = new CreatePaymentDto(44,"test-01","http://localhost:8080/callbadck","http://localhost:8080/webhook");
+        CreatePaymentDto dto = new CreatePaymentDto(44, "test-01", "http://localhost:8080/callbadck", "http://localhost:8080/webhook");
 
         Payment response = service.createPayment(dto);
         Payment saved = repository.findAll().get(0);

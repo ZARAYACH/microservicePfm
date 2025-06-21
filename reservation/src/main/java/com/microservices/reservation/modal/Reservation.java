@@ -42,16 +42,18 @@ public class Reservation {
     private LocalDateTime createdAt = LocalDateTime.now();
     @UpdateTimestamp
     private LocalDateTime updatedAt = LocalDateTime.now();
-    public enum ReservationStatus {
-        PENDING,
-        CONFIRMED,
-        CANCELLED
-    }
+
     public Reservation(Long eventId, Double price, String userEmail) {
         this.eventId = eventId;
         this.price = price;
         this.userEmail = userEmail;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public enum ReservationStatus {
+        PENDING,
+        CONFIRMED,
+        CANCELLED
     }
 }

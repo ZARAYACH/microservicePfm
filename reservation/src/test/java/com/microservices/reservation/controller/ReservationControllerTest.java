@@ -1,12 +1,9 @@
 package com.microservices.reservation.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microservices.common.dtos.DeleteResponse;
 import com.microservices.common.dtos.reservation.CreateReservationDto;
 import com.microservices.common.dtos.reservation.ReservationDto;
-import com.microservices.common.exception.BadArgumentException;
 import com.microservices.common.exception.NotFoundException;
-import com.microservices.common.exception.ServiceUnavailableException;
 import com.microservices.reservation.ReservationExceptionHandler;
 import com.microservices.reservation.mapper.ReservationMapper;
 import com.microservices.reservation.modal.Reservation;
@@ -21,33 +18,27 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class ReservationControllerTest {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Principal mockPrincipal = () -> "test@example.com";
     private MockMvc mockMvc;
-
     @Mock
     private ReservationService reservationService;
-
     @Mock
     private ReservationMapper reservationMapper;
-
     @InjectMocks
     private ReservationController reservationController;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
-    private final Principal mockPrincipal = () -> "test@example.com";
-
     private Reservation reservation;
     private ReservationDto reservationDto;
     private CreateReservationDto createReservationDto;
@@ -68,7 +59,7 @@ class ReservationControllerTest {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        reservationDto = new ReservationDto("1", 1L, "user@email.com", Reservation.ReservationStatus.PENDING.toString(),"44","http://payment.url",LocalDateTime.now(), LocalDateTime.now());
+        reservationDto = new ReservationDto("1", 1L, "user@email.com", Reservation.ReservationStatus.PENDING.toString(), "44", "http://payment.url", LocalDateTime.now(), LocalDateTime.now());
         createReservationDto = new CreateReservationDto(1L, 1);
     }
 

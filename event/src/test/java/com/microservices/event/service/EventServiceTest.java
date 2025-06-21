@@ -3,8 +3,8 @@ package com.microservices.event.service;
 import com.microservices.common.dtos.event.CreateEventDto;
 import com.microservices.common.exception.BadArgumentException;
 import com.microservices.common.exception.NotFoundException;
-import com.microservices.event.EventRepository;
 import com.microservices.event.modal.Event;
+import com.microservices.event.repository.EventRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,13 +25,11 @@ import static org.mockito.Mockito.when;
 @Slf4j
 public class EventServiceTest {
 
-    private Event validEvent;
-
     @Mock
     EventRepository eventRepository;
-
     @InjectMocks
     EventService eventService;
+    private Event validEvent;
 
     @BeforeEach
     void setUp() {

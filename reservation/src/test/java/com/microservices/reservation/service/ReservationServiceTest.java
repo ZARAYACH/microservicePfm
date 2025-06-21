@@ -7,7 +7,6 @@ import com.microservices.common.dtos.payment.PaymentDto;
 import com.microservices.common.dtos.reservation.CreateReservationDto;
 import com.microservices.common.exception.BadArgumentException;
 import com.microservices.common.exception.NotFoundException;
-import com.microservices.common.exception.ServiceUnavailableException;
 import com.microservices.reservation.config.ReservationServiceProperties;
 import com.microservices.reservation.http.EventClient;
 import com.microservices.reservation.http.PaymentClient;
@@ -18,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -59,7 +57,7 @@ class ReservationServiceTest {
 
         createReservationDto = new CreateReservationDto(1L, 1);
 
-        paymentDto = new PaymentDto("1", "",100.0, PaymentStatus.SUCCESS,LocalDateTime.now(), LocalDateTime.now(),"http://payment.url","http://payment.url/webhook" );
+        paymentDto = new PaymentDto("1", "", 100.0, PaymentStatus.SUCCESS, LocalDateTime.now(), LocalDateTime.now(), "http://payment.url", "http://payment.url/webhook");
 
         reservation = Reservation.builder()
                 .id("1")

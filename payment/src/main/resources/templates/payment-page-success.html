@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 </head>
 
 <body>
@@ -107,7 +107,8 @@
         <form>
             <div class="column" style="text-align: center; margin: 0 2rem">
                 <h1 style="color: #830000" th:text="${payment.getStatus()}"></h1>
-                <button type="button" th:if="${payment.getStatus().equals('SUCCESS')}" class="btn">Print receipt</button>
+                <button class="btn" th:if="${payment.getStatus().equals('SUCCESS')}" type="button">Print receipt
+                </button>
             </div>
 
         </form>

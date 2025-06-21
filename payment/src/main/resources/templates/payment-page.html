@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 </head>
 
 <body>
@@ -104,31 +104,31 @@
 
 </style>
 <div class="container">
-    <form th:action="@{'/api/v1/process/payments/' + ${payment.getId()}}" method="post">
+    <form method="post" th:action="@{'/api/v1/process/payments/' + ${payment.getId()}}">
         <div class="row">
             <div class="column">
                 <h3 class="title">Billing Address</h3>
                 <div class="input-box">
                     <span>Full Name :</span>
-                    <input type="text" placeholder="Jacob Aiden">
+                    <input placeholder="Jacob Aiden" type="text">
                 </div>
                 <div class="input-box">
                     <span>Email :</span>
-                    <input name="email" type="email" placeholder="example@example.com">
+                    <input name="email" placeholder="example@example.com" type="email">
                 </div>
                 <div class="input-box">
                     <span>Address :</span>
-                    <input type="text" placeholder="Room - Street - Locality">
+                    <input placeholder="Room - Street - Locality" type="text">
                 </div>
                 <div class="input-box">
                     <span>City :</span>
-                    <input type="text" placeholder="Berlin">
+                    <input placeholder="Berlin" type="text">
                 </div>
 
                 <div class="flex">
                     <div class="input-box">
                         <span>Zip Code :</span>
-                        <input type="number" placeholder="123 456">
+                        <input placeholder="123 456" type="number">
                     </div>
                 </div>
             </div>
@@ -137,35 +137,35 @@
                 <h3 class="title">Payment</h3>
                 <div class="input-box">
                     <span>Cards Accepted :</span>
-                    <img src="https://toppng.com/uploads/preview/visa-logo-png-11661940047ddydshoojj.png" alt="">
+                    <img alt="" src="https://toppng.com/uploads/preview/visa-logo-png-11661940047ddydshoojj.png">
                 </div>
                 <div class="input-box">
                     <span>Name On Card :</span>
-                    <input type="text" name="cardHolder" placeholder="Mr. Jacob Aiden">
+                    <input name="cardHolder" placeholder="Mr. Jacob Aiden" type="text">
                 </div>
                 <div class="input-box">
                     <span>Credit Card Number :</span>
-                    <input name="cardNumber" type="number" placeholder="1111 2222 3333 4444">
+                    <input name="cardNumber" placeholder="1111 2222 3333 4444" type="number">
                 </div>
                 <div class="input-box">
                     <span>Exp. Month :</span>
-                    <input type="text" placeholder="August">
+                    <input placeholder="August" type="text">
                 </div>
 
                 <div class="flex">
                     <div class="input-box">
                         <span>Exp. Year :</span>
-                        <input type="number" placeholder="2025">
+                        <input placeholder="2025" type="number">
                     </div>
                     <div class="input-box">
                         <span>CVV :</span>
-                        <input name="cvv" type="number" placeholder="123">
+                        <input name="cvv" placeholder="123" type="number">
                     </div>
                 </div>
             </div>
         </div>
-        <a th:href="'/api/v1/process/payments/' + ${payment.getId()} + '/cancel'" type="button" class="btn">Cancel</a>
-        <button type="submit" class="btn">
+        <a class="btn" th:href="'/api/v1/process/payments/' + ${payment.getId()} + '/cancel'" type="button">Cancel</a>
+        <button class="btn" type="submit">
             <span th:text="${'Pay ' + payment.getAmount() + ' MAD'}"></span>
         </button>
     </form>

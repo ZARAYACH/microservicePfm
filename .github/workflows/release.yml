@@ -30,9 +30,9 @@ jobs:
       - name: Login to the Registry
         uses: docker/login-action@v3
         with:
-            registry: ghcr.io
-            username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Creating release branch and publishing version to registry
         env:
           BUILD_ENV: 'github-actions'
@@ -46,7 +46,7 @@ jobs:
           git status
           git commit -am 'Creating release version ${{ github.event.inputs.releaseVersion }}'
           git push origin release/v${{ github.event.inputs.releaseVersion }} --force
-      - name:  Build and Push Docker Images to The container registry
+      - name: Build and Push Docker Images to The container registry
         run: |
           VERSION=${{ github.event.inputs.releaseVersion }}
           MODULES=("event" "notification" "payment" "reservation" "authorizationserver")

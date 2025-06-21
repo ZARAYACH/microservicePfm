@@ -32,26 +32,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 public class EventControllerTest {
 
+    private final static String TEST_USER_EMAIL = "test@email.com";
     private MockMvc mockMvc;
-
     @Mock
     private EventService eventService;
-
     @Mock
     private EventMapper eventMapper;
-
     @Mock
     private Principal principal;
-
     @InjectMocks
     private EventController eventController;
-
     private ObjectMapper objectMapper;
-
     private Event event;
     private EventDto eventDto;
     private CreateEventDto createEventDto;
-    private final static String TEST_USER_EMAIL = "test@email.com";
 
     @BeforeEach
     void setUp() {

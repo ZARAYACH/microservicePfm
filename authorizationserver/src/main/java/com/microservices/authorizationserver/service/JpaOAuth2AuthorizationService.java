@@ -1,25 +1,13 @@
 package com.microservices.authorizationserver.service;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Consumer;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.microservices.authorizationserver.modal.Authorization;
 import com.microservices.authorizationserver.repository.AuthorizationRepository;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
-import org.springframework.security.oauth2.core.OAuth2DeviceCode;
-import org.springframework.security.oauth2.core.OAuth2RefreshToken;
-import org.springframework.security.oauth2.core.OAuth2Token;
-import org.springframework.security.oauth2.core.OAuth2UserCode;
+import org.springframework.security.oauth2.core.*;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
@@ -32,6 +20,12 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.jackson2.OAuth2AuthorizationServerJackson2Module;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+
+import java.time.Instant;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService {
     private final AuthorizationRepository authorizationRepository;
@@ -50,6 +44,19 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
         this.objectMapper = objectMapper;
         this.objectMapper.registerModules(securityModules);
         this.objectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
+    }
+
+    private static AuthorizationGrantType resolveAuthorizationGrantType(String authorizationGrantType) {
+        if (AuthorizationGrantType.AUTHORIZATION_CODE.getValue().equals(authorizationGrantType)) {
+            return AuthorizationGrantType.AUTHORIZATION_CODE;
+        } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.getValue().equals(authorizationGrantType)) {
+            return AuthorizationGrantType.CLIENT_CREDENTIALS;
+        } else if (AuthorizationGrantType.REFRESH_TOKEN.getValue().equals(authorizationGrantType)) {
+            return AuthorizationGrantType.REFRESH_TOKEN;
+        } else if (AuthorizationGrantType.DEVICE_CODE.getValue().equals(authorizationGrantType)) {
+            return AuthorizationGrantType.DEVICE_CODE;
+        }
+        return new AuthorizationGrantType(authorizationGrantType);              // Custom authorization grant type
     }
 
     @Override
@@ -278,18 +285,5 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
         } catch (Exception ex) {
             throw new IllegalArgumentException(ex.getMessage(), ex);
         }
-    }
-
-    private static AuthorizationGrantType resolveAuthorizationGrantType(String authorizationGrantType) {
-        if (AuthorizationGrantType.AUTHORIZATION_CODE.getValue().equals(authorizationGrantType)) {
-            return AuthorizationGrantType.AUTHORIZATION_CODE;
-        } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.getValue().equals(authorizationGrantType)) {
-            return AuthorizationGrantType.CLIENT_CREDENTIALS;
-        } else if (AuthorizationGrantType.REFRESH_TOKEN.getValue().equals(authorizationGrantType)) {
-            return AuthorizationGrantType.REFRESH_TOKEN;
-        } else if (AuthorizationGrantType.DEVICE_CODE.getValue().equals(authorizationGrantType)) {
-            return AuthorizationGrantType.DEVICE_CODE;
-        }
-        return new AuthorizationGrantType(authorizationGrantType);              // Custom authorization grant type
     }
 }

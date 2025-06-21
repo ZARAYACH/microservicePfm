@@ -26,6 +26,7 @@ public class UserSerializer extends StdSerializer<User> {
         gen.writeStringField("email", value.getEmailAddress());
         gen.writeEndObject();
     }
+
     @Override
     public void serializeWithType(User value, JsonGenerator gen, SerializerProvider serializers, TypeSerializer typeSer) throws IOException {
         serialize(value, gen, serializers);

@@ -12,6 +12,6 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "app.security.jwt")
 @Configuration
 public class JwtConfigurationProperties {
-    private String KeyPairsPath = "/home/authServer/keys" ;
+    private String KeyPairsPath = "/home/authServer/keys";
 
 }

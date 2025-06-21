@@ -14,7 +14,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static com.microservices.common.exception.ControllerAdviceExceptionHandler.*;
+import static com.microservices.common.exception.ControllerAdviceExceptionHandler.buildExceptionDto;
 
 @ControllerAdvice
 @Slf4j

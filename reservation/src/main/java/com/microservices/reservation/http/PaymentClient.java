@@ -36,7 +36,7 @@ public class PaymentClient {
     public Optional<PaymentDto> findPaymentById(String id) throws ServiceUnavailableException {
         try {
             return Optional.ofNullable(webClient.get()
-                    .uri(String.format(reservationServiceProperties.getPaymentServiceUrl() + PAYMENT_API_PREFIX + "/%s" , id))
+                    .uri(String.format(reservationServiceProperties.getPaymentServiceUrl() + PAYMENT_API_PREFIX + "/%s", id))
                     .retrieve()
                     .bodyToMono(PaymentDto.class)
                     .block());

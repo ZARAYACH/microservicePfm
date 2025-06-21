@@ -45,7 +45,7 @@ public class ReservationController {
     public void updateReservation(@PathVariable String id, @RequestBody CreateReservationDto updateReservationDto, Principal principal) throws BadArgumentException, NotFoundException {
         Reservation reservation = reservationService.findById(id);
         reservationService.update(reservation, updateReservationDto, principal.getName()); // This Does Nothing
-        return ;
+        return;
     }
 
     @DeleteMapping("/{id}")

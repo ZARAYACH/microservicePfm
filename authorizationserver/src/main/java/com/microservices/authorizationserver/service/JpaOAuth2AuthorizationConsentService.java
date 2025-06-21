@@ -1,8 +1,5 @@
 package com.microservices.authorizationserver.service;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.microservices.authorizationserver.modal.AuthorizationConsent;
 import com.microservices.authorizationserver.repository.AuthorizationConsentRepository;
 import org.springframework.dao.DataRetrievalFailureException;
@@ -14,6 +11,9 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class JpaOAuth2AuthorizationConsentService implements OAuth2AuthorizationConsentService {
     private final AuthorizationConsentRepository authorizationConsentRepository;

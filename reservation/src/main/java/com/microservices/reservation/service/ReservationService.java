@@ -34,6 +34,16 @@ public class ReservationService {
     private final String RESERVATION_PAYMENT_CALLBACK_URL = "/api/v1/webhook/payments/%S/callback";
     private final String PAYMENT_WEBHOOK = "/api/v1/webhooks/payments";
 
+    public static Reservation toReservations(int quantity, EventDto eventDto, String userEmail) {
+        return Reservation.builder()
+                .eventId(eventDto.id())
+                .price(eventDto.ticketPrice())
+                .userEmail(userEmail)
+                .status(Reservation.ReservationStatus.PENDING)
+                .quantity(quantity)
+                .orderId(UUID.randomUUID().toString())
+                .build();
+    }
 
     public List<Reservation> list() {
         return reservationRepository.findAll();
@@ -81,7 +91,6 @@ public class ReservationService {
         return event;
     }
 
-
     @PreAuthorize("reservation.userEmail.equals(userEmail)")
     public void update(Reservation reservation, CreateReservationDto updateReservationDto, String userEmail) {
         return;
@@ -91,18 +100,6 @@ public class ReservationService {
     public void delete(@NotNull Reservation reservation, String userEmail) {
         reservationRepository.delete(reservation);
     }
-
-    public static Reservation toReservations(int quantity, EventDto eventDto, String userEmail) {
-        return Reservation.builder()
-                .eventId(eventDto.id())
-                .price(eventDto.ticketPrice())
-                .userEmail(userEmail)
-                .status(Reservation.ReservationStatus.PENDING)
-                .quantity(quantity)
-                .orderId(UUID.randomUUID().toString())
-                .build();
-    }
-
 
     public void signalReservationStatusUpdate(Reservation reservation) throws ServiceUnavailableException, NotFoundException {
         PaymentDto paymentDto = paymentClient.findPaymentById(reservation.getPaymentId())

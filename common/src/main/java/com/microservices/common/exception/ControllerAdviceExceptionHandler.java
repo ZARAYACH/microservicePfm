@@ -6,11 +6,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Objects;
 
 public interface ControllerAdviceExceptionHandler {
+
+    static ExceptionDto buildExceptionDto(Exception ex, HttpStatus status) {
+        return ExceptionDto.builder()
+                .message(ex.getMessage())
+                .status(status.value())
+                .statusDescription(status.getReasonPhrase())
+                .build();
+    }
 
     ResponseEntity<ExceptionDto> handleNotFound(NotFoundException ex);
 
@@ -29,13 +36,5 @@ public interface ControllerAdviceExceptionHandler {
 
     default ResponseEntity<ExceptionDto> buildResponse(ExceptionDto dto) {
         return new ResponseEntity<>(dto, Objects.requireNonNull(HttpStatus.resolve(dto.getStatus())));
-    }
-
-    static ExceptionDto buildExceptionDto(Exception ex, HttpStatus status) {
-        return ExceptionDto.builder()
-                .message(ex.getMessage())
-                .status(status.value())
-                .statusDescription(status.getReasonPhrase())
-                .build();
     }
 }

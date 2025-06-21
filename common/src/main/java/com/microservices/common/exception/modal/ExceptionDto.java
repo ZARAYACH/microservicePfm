@@ -15,10 +15,15 @@ import java.util.random.RandomGenerator;
 @Builder
 public class ExceptionDto {
 
-    @NotNull private final LocalDateTime timestamp = LocalDateTime.now();
-    @NotNull private final String message;
-    @NotNull private final int status;
-    @NotNull private final String statusDescription;
-    @NotNull private final String errorId = RandomStringUtils.random(10, 0, 0, true, true, null, Random.from(RandomGenerator.getDefault()));
+    @NotNull
+    private final LocalDateTime timestamp = LocalDateTime.now();
+    @NotNull
+    private final String message;
+    @NotNull
+    private final int status;
+    @NotNull
+    private final String statusDescription;
+    @NotNull
+    private final String errorId = RandomStringUtils.random(10, 0, 0, true, true, null, Random.from(RandomGenerator.getDefault()));
 
 }

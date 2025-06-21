@@ -5,15 +5,11 @@ import com.microservices.common.dtos.event.CreateEventDto;
 import com.microservices.common.dtos.event.EventDto;
 import com.microservices.common.exception.BadArgumentException;
 import com.microservices.common.exception.NotFoundException;
-import com.microservices.common.exception.UnauthenticatedException;
 import com.microservices.event.mapper.EventMapper;
 import com.microservices.event.modal.Event;
 import com.microservices.event.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;

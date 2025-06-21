@@ -9,7 +9,9 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -36,7 +38,7 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "authority_id"))
     private Set<Authority> authorities = new HashSet<>();
 
-    public User(String emailAddress, String password, String firstName, String lastName, String phoneNumber,Set<Authority> authorities) {
+    public User(String emailAddress, String password, String firstName, String lastName, String phoneNumber, Set<Authority> authorities) {
         this.emailAddress = emailAddress;
         this.password = password;
         this.firstName = firstName;
