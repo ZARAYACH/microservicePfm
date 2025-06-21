@@ -14,6 +14,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import static com.microservices.common.exception.ControllerAdviceExceptionHandler.*;
+
 @ControllerAdvice
 @Slf4j
 
@@ -64,7 +66,7 @@ public class EventExceptionHandler implements ControllerAdviceExceptionHandler {
 
     @ExceptionHandler(ServiceUnavailableException.class)
     @Override
-    public ResponseEntity<ExceptionDto> handleServiceUnvailable(Exception ex) {
+    public ResponseEntity<ExceptionDto> handleServiceUnavailable(Exception ex) {
         ExceptionDto dto = buildExceptionDto(new Exception("SERVICE UNAVAILABLE"), HttpStatus.SERVICE_UNAVAILABLE);
         log.error("Exception #{}", dto.getErrorId(), ex);
         return buildResponse(dto);

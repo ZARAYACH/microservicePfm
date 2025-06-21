@@ -9,10 +9,13 @@ import jakarta.persistence.EntityExistsException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import static com.microservices.common.exception.ControllerAdviceExceptionHandler.*;
 
 @ControllerAdvice
 @Slf4j
@@ -27,7 +30,7 @@ public class ReservationExceptionHandler implements ControllerAdviceExceptionHan
     }
 
     @Override
-    @ExceptionHandler(BadArgumentException.class)
+    @ExceptionHandler({BadArgumentException.class, HttpMessageNotReadableException.class})
     public ResponseEntity<ExceptionDto> handleBadArgument(BadArgumentException ex) {
         ExceptionDto dto = buildExceptionDto(ex, HttpStatus.BAD_REQUEST);
         log.debug("Exception #{}", dto.getErrorId(), ex);
@@ -60,9 +63,9 @@ public class ReservationExceptionHandler implements ControllerAdviceExceptionHan
 
     }
 
-    @ExceptionHandler(ServiceUnavailableException.class)
     @Override
-    public ResponseEntity<ExceptionDto> handleServiceUnvailable(Exception ex) {
+    @ExceptionHandler(ServiceUnavailableException.class)
+    public ResponseEntity<ExceptionDto> handleServiceUnavailable(Exception ex) {
         ExceptionDto dto = buildExceptionDto(new Exception("SERVICE UNAVAILABLE "), HttpStatus.SERVICE_UNAVAILABLE);
         log.error("Exception #{}", dto.getErrorId(), ex);
         return buildResponse(dto);

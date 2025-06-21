@@ -29,6 +29,7 @@ public class JWTSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/reservations/**").hasAnyAuthority("ROLE_EVENT_ORGANISER","ROLE_USER")
+                        .requestMatchers("/api/v1/webhooks/payments").hasAuthority("SCOPE_payment")
                         .requestMatchers("/api/v1/api-docs/**",
                                 "/swagger-ui.html",
                                 "/swagger-ui/*").permitAll()

@@ -17,14 +17,14 @@ public class WebClientConfig {
     @Bean
     public OAuth2AuthorizedClientManager authorizedClientManager(
             ClientRegistrationRepository registrations,
-            OAuth2AuthorizedClientRepository repository) {
+            OAuth2AuthorizedClientService clientService) {
 
         OAuth2AuthorizedClientProvider provider = OAuth2AuthorizedClientProviderBuilder.builder()
                 .clientCredentials()
                 .build();
 
-        DefaultOAuth2AuthorizedClientManager manager =
-                new DefaultOAuth2AuthorizedClientManager(registrations, repository);
+        AuthorizedClientServiceOAuth2AuthorizedClientManager manager =
+                new AuthorizedClientServiceOAuth2AuthorizedClientManager(registrations, clientService);
         manager.setAuthorizedClientProvider(provider);
 
         return manager;

@@ -7,6 +7,8 @@ public record ReservationDto(
         Long eventId,
         String userEmail,
         String status,
+        String paymentId,
+        String paymentUrl,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
