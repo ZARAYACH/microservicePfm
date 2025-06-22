@@ -5,11 +5,11 @@
     <parent>
         <groupId>com.microservices</groupId>
         <artifactId>pfm</artifactId>
-        <version>1.1.1-SNAPSHOT</version>
+        <version>1.1.1</version>
     </parent>
 
     <artifactId>event</artifactId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.1.1</version>
     <packaging>jar</packaging>
     <name>Event</name>
     <description>Event</description>
