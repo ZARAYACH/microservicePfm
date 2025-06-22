@@ -146,7 +146,7 @@ public class SecurityConfig {
                         new SecurityContextLogoutHandler()
                 )).logoutSuccessHandler(customLogoutSuccessHandler))
                 .authorizeHttpRequests(matcherRegistry -> matcherRegistry
-                        .requestMatchers("/assets/**", "login").permitAll()
+                        .requestMatchers("/assets/**", "login","/actuator/health").permitAll()
                         .anyRequest().authenticated());
         return http.build();
     }
