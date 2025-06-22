@@ -31,7 +31,8 @@ public class JWTSecurityConfig {
                                 "/api/v1/payments/*/receipt",
                                 "/api/v1/process/payments/*/cancel",
                                 "/swagger-ui.html",
-                                "/swagger-ui/*", "/api/v1/api-docs").permitAll()
+                                "/swagger-ui/*", "/api/v1/api-docs",
+                                "/actuator/health").permitAll()
                         .requestMatchers("/api/v1/payments/**").hasAuthority("SCOPE_payment")
                         .anyRequest().hasAuthority("ROLE_ADMIN"))
                 .oauth2ResourceServer(customizer ->

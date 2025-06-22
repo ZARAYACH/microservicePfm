@@ -30,7 +30,8 @@ public class JWTSecurityConfig {
                         .requestMatchers("/api/v1/webhooks/payments").hasAuthority("SCOPE_payment")
                         .requestMatchers("/api/v1/api-docs/**",
                                 "/swagger-ui.html",
-                                "/swagger-ui/*").permitAll()
+                                "/swagger-ui/*",
+                                "/actuator/health").permitAll()
                         .anyRequest().hasAuthority("ROLE_ADMIN"))
                 .oauth2ResourceServer(customizer ->
                         customizer.jwt(withDefaults()))
