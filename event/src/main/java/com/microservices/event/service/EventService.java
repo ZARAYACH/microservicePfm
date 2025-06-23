@@ -66,8 +66,10 @@ public class EventService {
         event.setPlace(newEvent.getPlace());
         event.setTicketPrice(newEvent.getTicketPrice());
         event.setAvailableTickets(newEvent.getAvailableTickets());
+        event.setType(newEvent.getType());
+        event.setOrganiser(organiser);
 
-        return eventRepository.save(newEvent);
+        return eventRepository.save(event);
     }
 
     @PreAuthorize("hasAuthority('ROLE_EVENT_ORGANISER') && event.organiser.equals(organiser)")
