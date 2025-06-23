@@ -38,11 +38,13 @@ spec:
             - name: "OAUTH2_JWK_SET_URI"
               value: "https://pfmtimemanagementbackend.eastus.cloudapp.azure.com/oauth2/jwks"
             - name: "SERVICES_ROOT_URL"
-              value: "http://reservation.pfmmicroservices.local"
+              value: "http://reservation-service"
             - name: "SERVICES_PAYMENT_URL"
-              value: "http://payment.pfmmicroservices.local"
+              value: "http://payment-service"
             - name: "SERVICES_EVENT_URL"
               value: "http://event-service"
+            - name : "OAUTH_CLIENT_SCOPE"
+              value: "profile,openid,payment,event"
           readinessProbe:
             httpGet:
               path: /actuator/health
